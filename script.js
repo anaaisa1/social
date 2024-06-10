@@ -6,29 +6,56 @@ const textoResultado = document.querySelector(".texto-resultado");
 
 const perguntas = [
     {
-        enunciado: "Como podemos melhorar o acesso à educação de qualidade para crianças de comunidades desfavorecidas?",
+        enunciado: "Como podemos melhorar o acesso á educação de qualidade para as crianças de comunidades desfavorecidas?",
         alternativas: [
-            " Implementar programas de bolsas de estudo e financiamento para estudantes de baixa renda, garantindo que possam frequentar escolas de qualidade.",
-            " Investir na melhoria das infraestruturas e na formação de professores em escolas públicas localizadas em áreas desfavorecidas, para garantir um ensino de qualidade."
+            {
+                texto: "a)Investir na capacitação de professores e na infraestrutura das escolas em comunidades desfavorecidas, além de implementar programas de mentoria e tutoria para apoiar o desenvolvimento acadêmico das crianças.",
+                afirmacao: "correto!"
+            },
+            {
+                texto: "b)Reduzir o financiamento das escolas públicas em comunidades desfavorecidas e concentrar os recursos apenas nas instituições de ensino privadas. ",
+                afirmacao: "errado!"
+            }
         ]
     },
 ];
 
+
 let atual = 0;
 let perguntaAtual;
+let historiaFinal = "";
 
 function mostraPergunta() {
+    if (atual >= perguntas.length) {
+        mostraResultado();
+        return;
+    }
     perguntaAtual = perguntas[atual];
     caixaPerguntas.textContent = perguntaAtual.enunciado;
+    caixaAlternativas.textContent = "";
     mostraAlternativas();
 }
-function mostraAlternativas() {
+
+function mostraAlternativas(){
     for(const alternativa of perguntaAtual.alternativas) {
         const botaoAlternativas = document.createElement("button");
-        botaoAlternativa.textContent = alternativa;
+        botaoAlternativas.textContent = alternativa.texto;
+        botaoAlternativas.addEventListener("click", () => respostaSelecionada(alternativa));
         caixaAlternativas.appendChild(botaoAlternativas);
     }
 }
 
-mostraPergunta();
+function respostaSelecionada(opcaoSelecionada) {
+    const afirmacoes = opcaoSelecionada.afirmacao;
+    historiaFinal += afirmacoes + "";
+    atual++;
+    mostraPergunta();
+}
 
+function mostraResultado() {
+    caixaPerguntas.textContent = "";
+    textoResultado.textContent = historiaFinal;
+    caixaAlternativas.textContent = "";
+}
+
+mostraPergunta();
